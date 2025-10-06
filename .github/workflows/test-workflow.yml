@@ -1,0 +1,46 @@
+name: Test Workflow
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Basic Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: List files
+        run: |
+          echo "📁 Repository contents:"
+          ls -la
+          echo ""
+          echo "📦 Contracts directory:"
+          ls -la contracts/
+          echo ""
+          echo "🎛️ Neural modules:"
+          ls -la neural-*.js
+
+      - name: Check smart contracts
+        run: |
+          echo "✅ Smart contracts found:"
+          cat contracts/RitualDAO.sol | head -20
+          echo ""
+          cat contracts/PropheticSessionNFT.sol | head -20
+
+      - name: Workflow success
+        run: |
+          echo "🎉 GitHub Actions workflow is working!"
+          echo "✅ All files are accessible"
+          echo "✅ Node.js is configured"
+          echo "✅ Ready for full CI/CD pipeline"

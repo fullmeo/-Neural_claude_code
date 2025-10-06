@@ -1,0 +1,41 @@
+{
+  "name": "dj-cloudio",
+  "version": "1.0.0",
+  "description": "AI-Powered Prophetic DJ with Web3 Integration",
+  "main": "neuralmix_enhanced_fixed.html",
+  "scripts": {
+    "start": "npx serve . -p 3000",
+    "test": "echo \"No tests specified yet\" && exit 0",
+    "lint": "eslint . --ext .js,.html --max-warnings 0",
+    "format": "prettier --write \"**/*.{js,html,css,json,md}\"",
+    "format:check": "prettier --check \"**/*.{js,html,css,json,md}\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fullmeo/-Neural_claude_code.git"
+  },
+  "keywords": [
+    "dj",
+    "ai",
+    "web3",
+    "blockchain",
+    "audio",
+    "mixing",
+    "nft",
+    "dao"
+  ],
+  "author": "fullmeo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fullmeo/-Neural_claude_code/issues"
+  },
+  "homepage": "https://github.com/fullmeo/-Neural_claude_code#readme",
+  "devDependencies": {
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1",
+    "serve": "^14.2.1"
+  },
+  "dependencies": {
+    "web3": "^4.3.0"
+  }
+}
