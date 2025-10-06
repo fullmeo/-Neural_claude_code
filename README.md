@@ -19,6 +19,31 @@
 
 ---
 
+## 🤖 Claude CLI - Assistant de Développement
+
+**Nouveau !** CLI interactif avec glyphes pour simuler Claude Code localement.
+
+```bash
+# Installation
+npm install
+
+# Mode interactif
+npm run claude
+
+# Commandes rapides
+npm run claude:analyze     # Analyse complète
+npm run claude:test        # Tests
+npm run claude:fix         # Auto-fix ESLint + Prettier
+npm run claude:review      # Code review + GitHub workflow
+npm run claude:security    # Security audit + GitHub workflow
+```
+
+**10 actions disponibles:** analyze, test, coverage, security, fix, deploy, docs, status, review, optimize
+
+📚 **Documentation complète:** [CLAUDE_CLI_README.md](./CLAUDE_CLI_README.md) | [Quick Start](./QUICK_START_CLI.md)
+
+---
+
 ## ✨ Fonctionnalités
 
 ### 🎛️ Neural AI Autopilot

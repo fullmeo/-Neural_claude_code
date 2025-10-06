@@ -3,12 +3,30 @@
   "version": "1.0.0",
   "description": "AI-Powered Prophetic DJ with Web3 Integration",
   "main": "neuralmix_enhanced_fixed.html",
+  "bin": {
+    "claude": "./claude-cli.js",
+    "claude-cli": "./claude-cli.js"
+  },
   "scripts": {
     "start": "npx serve . -p 3000",
-    "test": "echo \"No tests specified yet\" && exit 0",
+    "test": "cd contracts && npx hardhat test",
+    "coverage": "cd contracts && npx hardhat coverage",
     "lint": "eslint . --ext .js,.html --max-warnings 0",
+    "lint:fix": "eslint . --ext .js,.html --fix",
     "format": "prettier --write \"**/*.{js,html,css,json,md}\"",
-    "format:check": "prettier --check \"**/*.{js,html,css,json,md}\""
+    "format:check": "prettier --check \"**/*.{js,html,css,json,md}\"",
+    "compile": "cd contracts && npx hardhat compile",
+    "deploy:testnet": "cd contracts && npx hardhat run scripts/deploy.js --network baseSepolia",
+    "deploy:mainnet": "cd contracts && npx hardhat run scripts/deploy.js --network base",
+    "claude": "node claude-cli.js",
+    "claude:analyze": "node claude-cli.js analyze",
+    "claude:test": "node claude-cli.js test",
+    "claude:fix": "node claude-cli.js fix",
+    "claude:review": "node claude-cli.js review && gh workflow run code-quality.yml -f task=code-quality-only",
+    "claude:security": "node claude-cli.js security && gh workflow run code-quality.yml -f task=security-only",
+    "claude:optimize": "node claude-cli.js optimize",
+    "claude:docs": "node claude-cli.js docs",
+    "claude:status": "node claude-cli.js status"
   },
   "repository": {
     "type": "git",
