@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neural Bridge - Integration Demo</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ffff;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 { color: #00ffff; border-bottom: 2px solid #00ffff; padding-bottom: 10px; }
+        h2 { color: #00ff88; margin-top: 30px; }
+        .section {
+            background: rgba(0, 255, 255, 0.05);
+            border: 1px solid #00ffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .code-block {
+            background: #000;
+            border: 1px solid #00ffff;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .code-block pre { margin: 0; color: #fff; }
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin: 5px 5px 5px 0;
+        }
+        .status.success { background: #00ff88; color: #000; }
+        .status.pending { background: #ffaa00; color: #000; }
+        .status.error { background: #ff4444; color: #fff; }
+        button {
+            background: #00ffff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+        }
+        button:hover { background: #00ff88; }
+        #log {
+            background: #000;
+            border: 1px solid #00ffff;
+            border-radius: 4px;
+            padding: 15px;
+            height: 200px;
+            overflow-y: auto;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        .log-entry { margin: 2px 0; }
+        .log-info { color: #00ffff; }
+        .log-success { color: #00ff88; }
+        .log-error { color: #ff4444; }
+    </style>
+</head>
+<body>
+    <h1>🌉 Neural Bridge Integration Demo</h1>
+    
+    <div class="section">
+        <h2>1. Mock Reference App (Simulated neuralmix_enhanced_fixed.html)</h2>
+        <p>Simulation simplifiée de l'app de référence pour tester l'intégration</p>
+        
+        <div id="mock-status">
+            <span class="status pending">Mock App</span>
+            <span class="status pending">Bridge</span>
+            <span class="status pending">Event Bus</span>
+        </div>
+        
+        <button onclick="initMockApp()">Initialize Mock App</button>
+        <button onclick="initBridge()">Initialize Bridge</button>
+    </div>
+
+    <div class="section">
+        <h2>2. Innovation Modules (Example)</h2>
+        <p>Exemple de module d'innovation qui s'intègre via le bridge</p>
+        
+        <button onclick="registerAIModule()">Register AI Module</button>
+        <button onclick="registerMetaverseModule()">Register Metaverse Module</button>
+        <button onclick="toggleInnovation('AI Analysis')">Toggle AI Module</button>
+    </div>
+
+    <div class="section">
+        <h2>3. Integration Test</h2>
+        <p>Tester la communication bridge → référence → innovation</p>
+
+        <button onclick="testTrackLoad()">Simulate Track Load</button>
+        <button onclick="testPlayToggle()">Simulate Play Toggle</button>
+        <button onclick="testCrossfader()">Simulate Crossfader</button>
+        <button onclick="testEventFlow()">Test Full Event Flow</button>
+    </div>
+
+    <div class="section">
+        <h2>4. Audio Bridge Test (Phase 2)</h2>
+        <p>Tester l'intégration audio et les analyses temps réel</p>
+
+        <button onclick="testAudioBridge()">Initialize Audio Bridge</button>
+        <button onclick="testAudioAnalysis()">Get Audio Analysis</button>
+        <button onclick="showAudioStats()">Show Audio Stats</button>
+    </div>
+
+    <div class="section">
+        <h2>5. Event Log</h2>
+        <div id="log"></div>
+        <button onclick="clearLog()">Clear Log</button>
+    </div>
+
+    <!-- Include bridge core -->
+    <script src="neural_event_bus.js"></script>
+    <script src="neural_bridge_core.js"></script>
+    <script src="neural-audio-bridge.js"></script>
+
+    <script>
+        // Mock Reference App
+        const mockApp = {
+            decks: {
+                a: { audioElement: { paused: true }, buffer: null },
+                b: { audioElement: { paused: true }, buffer: null }
+            },
+            audioContext: new (window.AudioContext || window.webkitAudioContext)(),
+            
+            loadTrack(deck, file) {
+                log('info', `[MockApp] Loading track on deck ${deck}: ${file.name}`);
+                this.decks[deck].buffer = 'mock-buffer';
+                return true;
+            },
+            
+            togglePlay(deck) {
+                const deckData = this.decks[deck];
+                deckData.audioElement.paused = !deckData.audioElement.paused;
+                log('info', `[MockApp] Deck ${deck} ${deckData.audioElement.paused ? 'paused' : 'playing'}`);
+                return true;
+            },
+            
+            updateCrossfader(value) {
+                log('info', `[MockApp] Crossfader: ${value}`);
+                return true;
+            },
+            
+            connectToPeer(peerId) {
+                log('info', `[MockApp] Connecting to peer: ${peerId}`);
+                return Promise.resolve(true);
+            }
+        };
+
+        // Mock AI Innovation Module
+        const AIModule = {
+            name: 'AI Analysis',
+            
+            async init(context) {
+                log('success', '[AI Module] Initialized with bridge context');
+                
+                // Listen to track loads
+                context.eventBus.on('track:loaded', (data) => {
+                    log('info', `[AI Module] Analyzing track on deck ${data.deck}...`);
+                    setTimeout(() => {
+                        context.sendToReference('ai:analysis-complete', {
+                            deck: data.deck,
+                            bpm: 128,
+                            key: 'Am',
+                            genre: 'Electronic'
+                        });
+                        log('success', `[AI Module] Analysis complete - BPM: 128, Key: Am`);
+                    }, 1000);
+                });
+                
+                return { status: 'ready' };
+            },
+            
+            cleanup() {
+                log('info', '[AI Module] Cleanup complete');
+            }
+        };
+
+        // Mock Metaverse Module
+        const MetaverseModule = {
+            name: 'Metaverse',
+            
+            async init(context) {
+                log('success', '[Metaverse Module] Initialized');
+                
+                context.eventBus.on('audio:toggle', (data) => {
+                    if (!data.playing) return;
+                    log('info', `[Metaverse] Updating visualization for deck ${data.deck}`);
+                });
+                
+                return { status: 'ready' };
+            },
+            
+            cleanup() {
+                log('info', '[Metaverse Module] Cleanup complete');
+            }
+        };
+
+        // Logging
+        function log(type, message) {
+            const logEl = document.getElementById('log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry log-${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logEl.appendChild(entry);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+
+        // Demo functions
+        function initMockApp() {
+            window.app = mockApp;
+            updateStatus(0, 'success', 'Mock App Ready');
+            log('success', 'Mock reference app initialized');
+        }
+
+        async function initBridge() {
+            if (!window.app) {
+                log('error', 'Mock app not initialized!');
+                return;
+            }
+
+            const success = await window.NeuralBridge.init(window.app);
+            if (success) {
+                updateStatus(1, 'success', 'Bridge Ready');
+                updateStatus(2, 'success', 'Event Bus Ready');
+                log('success', 'Neural Bridge initialized successfully');
+
+                // Setup audio listeners after bridge is ready
+                setupAudioListeners();
+            } else {
+                log('error', 'Bridge initialization failed');
+            }
+        }
+
+        function registerAIModule() {
+            const success = window.NeuralBridge.registerInnovation('AI Analysis', AIModule);
+            if (success) {
+                log('success', 'AI Module registered');
+            }
+        }
+
+        function registerMetaverseModule() {
+            const success = window.NeuralBridge.registerInnovation('Metaverse', MetaverseModule);
+            if (success) {
+                log('success', 'Metaverse Module registered');
+            }
+        }
+
+        async function toggleInnovation(name) {
+            const innovation = Array.from(window.NeuralBridge.innovations.entries())
+                .find(([n]) => n === name);
+            
+            if (!innovation) {
+                log('error', `Innovation ${name} not found`);
+                return;
+            }
+            
+            const [_, data] = innovation;
+            if (data.enabled) {
+                await window.NeuralBridge.disableInnovation(name);
+            } else {
+                await window.NeuralBridge.enableInnovation(name);
+            }
+        }
+
+        function testTrackLoad() {
+            if (!window.app) {
+                log('error', 'Initialize mock app first');
+                return;
+            }
+            
+            const mockFile = { name: 'test-track.mp3' };
+            window.app.loadTrack('a', mockFile);
+        }
+
+        function testPlayToggle() {
+            if (!window.app) {
+                log('error', 'Initialize mock app first');
+                return;
+            }
+            
+            window.app.togglePlay('a');
+        }
+
+        function testCrossfader() {
+            if (!window.app) {
+                log('error', 'Initialize mock app first');
+                return;
+            }
+            
+            const value = Math.random();
+            window.app.updateCrossfader(value);
+        }
+
+        async function testEventFlow() {
+            log('info', '=== Starting Full Event Flow Test ===');
+            
+            // 1. Init
+            initMockApp();
+            await new Promise(r => setTimeout(r, 500));
+            
+            await initBridge();
+            await new Promise(r => setTimeout(r, 500));
+            
+            // 2. Register modules
+            registerAIModule();
+            await new Promise(r => setTimeout(r, 300));
+            
+            // 3. Enable AI
+            await toggleInnovation('AI Analysis');
+            await new Promise(r => setTimeout(r, 300));
+            
+            // 4. Load track (triggers AI analysis)
+            testTrackLoad();
+            await new Promise(r => setTimeout(r, 1500));
+            
+            // 5. Play
+            testPlayToggle();
+            
+            log('success', '=== Event Flow Test Complete ===');
+        }
+
+        function updateStatus(index, type, text) {
+            const statuses = document.querySelectorAll('#mock-status .status');
+            if (statuses[index]) {
+                statuses[index].className = `status ${type}`;
+                statuses[index].textContent = text;
+            }
+        }
+
+        // Audio Bridge instance
+        let audioBridge = null;
+
+        // Audio Bridge Test Functions
+        async function testAudioBridge() {
+            if (!window.NeuralBridge?.eventBus) {
+                log('error', 'Neural Bridge not initialized. Run "Initialize Bridge" first.');
+                return;
+            }
+
+            if (!window.app?.audioContext) {
+                log('error', 'Mock app AudioContext not available. Initialize mock app first.');
+                return;
+            }
+
+            try {
+                audioBridge = new NeuralAudioBridge(window.NeuralBridge.eventBus, {
+                    maxLatency: 5,
+                    analysisInterval: 50,
+                    fftSize: 2048
+                });
+
+                const success = await audioBridge.init();
+                if (success) {
+                    log('success', 'Audio Bridge initialized successfully');
+                    log('info', `Sample rate: ${audioBridge.audioContext.sampleRate}Hz`);
+                } else {
+                    log('error', 'Audio Bridge initialization failed');
+                }
+            } catch (error) {
+                log('error', `Audio Bridge error: ${error.message}`);
+            }
+        }
+
+        function testAudioAnalysis() {
+            if (!audioBridge || !audioBridge.initialized) {
+                log('error', 'Audio Bridge not initialized');
+                return;
+            }
+
+            // Get master analysis
+            const masterAnalysis = audioBridge.getMasterAnalysis();
+            if (masterAnalysis) {
+                log('success', `Master analysis: FFT size ${masterAnalysis.fftSize}, Sample rate ${masterAnalysis.sampleRate}Hz`);
+            }
+
+            // Get deck analysis
+            const deckAnalysis = audioBridge.getDeckAnalysis('a');
+            if (deckAnalysis) {
+                log('success', `Deck A analysis available`);
+            } else {
+                log('info', 'No deck analysis yet (load a track first)');
+            }
+        }
+
+        function showAudioStats() {
+            if (!audioBridge || !audioBridge.initialized) {
+                log('error', 'Audio Bridge not initialized');
+                return;
+            }
+
+            const stats = audioBridge.getStats();
+            log('info', `=== Audio Bridge Stats ===`);
+            log('info', `Avg Latency: ${stats.avgLatency.toFixed(2)}ms`);
+            log('info', `Glitches: ${stats.glitches}`);
+            log('info', `Connections: ${stats.connections}`);
+            log('info', `Decks: ${stats.decks}`);
+            log('info', `Context State: ${stats.contextState}`);
+        }
+
+        // Setup audio event listeners when bridge is initialized
+        function setupAudioListeners() {
+            if (!window.NeuralBridge?.eventBus) return;
+
+            const eventBus = window.NeuralBridge.eventBus;
+
+            eventBus.on('audio:bridge:ready', (data) => {
+                log('success', `[Audio Bridge] Ready - Sample rate: ${data.sampleRate}Hz`);
+            });
+
+            eventBus.on('audio:track:loaded', (data) => {
+                log('info', `[Audio Bridge] Track loaded on deck ${data.deckId}: ${data.filename}`);
+            });
+
+            eventBus.on('audio:deck:play', (data) => {
+                log('info', `[Audio Bridge] Deck ${data.deckId} playing`);
+            });
+
+            eventBus.on('audio:deck:pause', (data) => {
+                log('info', `[Audio Bridge] Deck ${data.deckId} paused`);
+            });
+
+            eventBus.on('audio:warning:latency', (data) => {
+                log('error', `[Audio Bridge] High latency warning: ${data.latency.toFixed(2)}ms`);
+            });
+
+            log('info', '[Demo] Audio event listeners registered');
+        }
+
+        // Auto-log
+        log('info', 'Demo page loaded. Click "Test Full Event Flow" to see integration in action.');
+    </script>
+</body>
+</html>

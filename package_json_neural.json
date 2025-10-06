@@ -1,0 +1,33 @@
+{
+  "name": "neural-bridge",
+  "version": "1.0.0",
+  "description": "Non-invasive integration layer for Neural DJ innovations",
+  "type": "module",
+  "main": "src/core/neural-bridge-core.js",
+  "scripts": {
+    "dev": "npx serve src/demo -p 3000",
+    "test": "node --test tests/**/*.test.js",
+    "lint": "eslint src/**/*.js",
+    "format": "prettier --write src/**/*.js",
+    "build": "node scripts/build.js",
+    "validate": "node scripts/validate-integration.js"
+  },
+  "keywords": [
+    "audio",
+    "dj",
+    "web-audio",
+    "bridge",
+    "integration"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0",
+    "serve": "^14.2.0"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

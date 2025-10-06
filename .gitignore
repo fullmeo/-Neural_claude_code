@@ -1,0 +1,51 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Environment variables
+.env
+.env.local
+.env.production
+*.env
+
+# Build outputs
+dist/
+build/
+*.log
+
+# Contract artifacts
+contracts/artifacts/
+contracts/cache/
+contracts/deployments/
+contracts/coverage/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Private keys (IMPORTANT!)
+*.pem
+*.key
+*.p12
+private-key.txt
+
+# Hardhat
+coverage/
+coverage.json
+typechain/
+typechain-types/
+
+# Testing
+.nyc_output/
+
+# Temporary
+*.tmp
+*.temp

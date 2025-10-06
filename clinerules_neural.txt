@@ -1,0 +1,127 @@
+# Neural Bridge - Claude Code Rules
+
+## Project Context
+This is the Neural Bridge system - a non-invasive integration layer for connecting innovation modules to neuralmix_enhanced_fixed.html (reference app) without modifying its code.
+
+## Core Principles (CRITICAL)
+1. **Non-invasive**: NEVER modify neuralmix_enhanced_fixed.html source code
+2. **Security first**: All modules run in isolated context with controlled access
+3. **Performance**: <5ms event latency, <100MB memory total
+4. **Graceful degradation**: Reference app must work even if bridge fails
+
+## Code Standards
+- Use vanilla JavaScript (ES6+), no frameworks
+- All functions must have JSDoc comments
+- Include error handling in all async operations
+- Validate all inputs before processing
+- Clean up resources on module disable
+
+## Security Checklist (MUST VERIFY)
+- [ ] No API keys or secrets in client code
+- [ ] Input validation on all event data
+- [ ] Storage uses 'neural_' namespace prefix
+- [ ] No eval() or innerHTML with user input
+- [ ] Resource limits enforced (memory, queue size)
+
+## Architecture Rules
+- Event bus is the ONLY inter-module communication
+- Innovations receive context object, not direct app access
+- All hooks use wrapper pattern: originalFunc → emit event → return
+- UI injection only via dedicated createInnovationPanel()
+
+## File Organization
+/src/core/          - Bridge core and event bus (DO NOT BREAK)
+/src/modules/       - Innovation modules (add here)
+/src/audio/         - Audio processing (Phase 2)
+/docs/              - Documentation (keep updated)
+/tests/             - Test files (Phase 5)
+
+## Current Phase: 1 (Core Complete)
+Next phase: Audio Integration (neural-audio-bridge.js)
+
+## Development Workflow
+1. Read IMPLEMENTATION_ROADMAP.md for current phase
+2. Check ARCHITECTURE.md for technical specs
+3. Implement following security checklist
+4. Test with neural-bridge-demo.html
+5. Update documentation if API changes
+
+## Testing Requirements
+- All new modules must have init() and cleanup() methods
+- Test events flow with demo page before integration
+- Verify no memory leaks on enable/disable cycles
+- Check browser console for errors
+
+## Common Patterns
+
+### Creating Innovation Module
+```javascript
+const MyModule = {
+  name: 'Module Name',
+  
+  async init(context) {
+    // Setup listeners
+    context.eventBus.on('event', handler);
+    
+    // Return instance
+    return { status: 'ready' };
+  },
+  
+  cleanup() {
+    // Remove listeners, free resources
+  }
+};
+```
+
+### Hook Injection Pattern
+```javascript
+const original = app.method;
+app.method = function(...args) {
+    const result = original.call(this, ...args);
+    bridge.eventBus.emit('event', data);
+    return result;
+};
+```
+
+### Event Emission
+```javascript
+// Validate before emit
+if (validateData(data)) {
+    context.eventBus.emit('category:action', data);
+}
+```
+
+## Don't Do
+- Don't modify neuralmix_enhanced_fixed.html
+- Don't access window.app directly from innovations
+- Don't use synchronous localStorage in audio path
+- Don't create global variables (use module scope)
+- Don't emit events without validation
+
+## Integration with Reference App
+The reference app (neuralmix_enhanced_fixed.html) is loaded first.
+Bridge auto-detects and injects after DOM ready.
+See neural-bridge-demo.html for integration example.
+
+## Performance Targets
+- Bridge init: <50ms
+- Event latency: <5ms
+- Memory: <100MB total (all modules)
+- Module activation: <100ms
+
+## When Stuck
+1. Check ARCHITECTURE.md for specs
+2. Review neural-bridge-demo.html for working example
+3. Verify event bus stats: eventBus.getStats()
+4. Check bridge state: NeuralBridge.getState()
+
+## Git Workflow
+- Branch per phase: phase-2-audio, phase-3-ai, etc.
+- Commit after each working module
+- Tag releases: v1.0-core, v1.1-audio, etc.
+
+## Documentation Updates
+When adding modules, update:
+- ARCHITECTURE.md (if API changes)
+- IMPLEMENTATION_ROADMAP.md (mark phase complete)
+- README.md (usage examples)
