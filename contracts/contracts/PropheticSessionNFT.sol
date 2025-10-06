@@ -32,6 +32,7 @@ contract PropheticSessionNFT is ERC721, ERC721URIStorage, Ownable {
     // Mappings
     mapping(uint256 => SessionMetadata) public sessionData;
     mapping(string => uint256) public sessionIdToTokenId;
+    mapping(string => bool) private _sessionExists; // Fix for tokenId 0 collision
     mapping(address => uint256[]) public djSessions;
 
     // Events
@@ -73,7 +74,7 @@ contract PropheticSessionNFT is ERC721, ERC721URIStorage, Ownable {
         string memory _ipfsHash,
         string memory _tokenURI
     ) external returns (uint256) {
-        require(sessionIdToTokenId[_sessionId] == 0, "Session already minted");
+        require(!_sessionExists[_sessionId], "Session already minted");
         require(bytes(_ipfsHash).length > 0, "IPFS hash required");
 
         uint256 tokenId = _tokenIdCounter;
@@ -98,6 +99,7 @@ contract PropheticSessionNFT is ERC721, ERC721URIStorage, Ownable {
         });
 
         sessionIdToTokenId[_sessionId] = tokenId;
+        _sessionExists[_sessionId] = true; // Mark session as minted
         djSessions[msg.sender].push(tokenId);
 
         emit SessionMinted(tokenId, _sessionId, msg.sender, _recipient, _ipfsHash);
@@ -125,6 +127,15 @@ contract PropheticSessionNFT is ERC721, ERC721URIStorage, Ownable {
         _setTokenURI(_tokenId, _newTokenURI);
 
         emit SessionUpdated(_tokenId, _newIpfsHash);
+    }
+
+    /**
+     * @dev Check if a session ID has been minted
+     * @param _sessionId Session ID to check
+     * @return bool True if session exists
+     */
+    function sessionExists(string memory _sessionId) external view returns (bool) {
+        return _sessionExists[_sessionId];
     }
 
     /**
