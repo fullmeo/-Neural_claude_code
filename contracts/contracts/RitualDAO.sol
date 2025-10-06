@@ -2,7 +2,7 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
  * @title RitualDAO
@@ -10,6 +10,7 @@ import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
  * Community curates the prophetic journey through collective voting
  */
 contract RitualDAO is Ownable, ReentrancyGuard {
+    constructor() Ownable(msg.sender) {}
 
     // Ritual types
     enum RitualType {

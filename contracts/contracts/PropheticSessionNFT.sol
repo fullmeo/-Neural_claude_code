@@ -4,7 +4,6 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
 
 /**
  * @title PropheticSessionNFT
@@ -12,9 +11,9 @@ import "@openzeppelin/contracts/utils/Counters.sol";
  * Each session is a unique on-chain artefact with complete metadata
  */
 contract PropheticSessionNFT is ERC721, ERC721URIStorage, Ownable {
-    using Counters for Counters.Counter;
+    constructor() ERC721("DJ Cloudio Prophetic Session", "PROPHECY") Ownable(msg.sender) {}
 
-    Counters.Counter private _tokenIdCounter;
+    uint256 private _tokenIdCounter;
 
     // Session metadata structure
     struct SessionMetadata {
@@ -49,8 +48,6 @@ contract PropheticSessionNFT is ERC721, ERC721URIStorage, Ownable {
         string newIpfsHash
     );
 
-    constructor() ERC721("DJ Cloudio Prophetic Session", "PROPHECY") {}
-
     /**
      * @dev Mint a new session NFT
      * @param _recipient Address to receive the NFT
@@ -79,8 +76,8 @@ contract PropheticSessionNFT is ERC721, ERC721URIStorage, Ownable {
         require(sessionIdToTokenId[_sessionId] == 0, "Session already minted");
         require(bytes(_ipfsHash).length > 0, "IPFS hash required");
 
-        uint256 tokenId = _tokenIdCounter.current();
-        _tokenIdCounter.increment();
+        uint256 tokenId = _tokenIdCounter;
+        _tokenIdCounter++;
 
         // Mint NFT
         _safeMint(_recipient, tokenId);
@@ -183,14 +180,10 @@ contract PropheticSessionNFT is ERC721, ERC721URIStorage, Ownable {
      * @dev Get total minted sessions
      */
     function totalSessions() external view returns (uint256) {
-        return _tokenIdCounter.current();
+        return _tokenIdCounter;
     }
 
     // Override functions required by Solidity
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
-        super._burn(tokenId);
-    }
-
     function tokenURI(uint256 tokenId)
         public
         view
