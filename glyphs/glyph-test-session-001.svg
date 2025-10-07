@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Gradient -->
+  <defs>
+    <radialGradient id="bg-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#00FFFF;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#000510;stop-opacity:1" />
+    </radialGradient>
+
+    <linearGradient id="card-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00FFFF;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#00e1e1;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Glow Filter -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Sacred Geometry Pattern -->
+    <pattern id="geometry" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 20 10 L 30 30 L 10 30 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+             <path d="M 20 30 L 30 10 L 10 10 Z" fill="none" stroke="currentColor" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" fill="url(#bg-gradient)"/>
+
+  <!-- Sacred Geometry Background -->
+  <rect width="512" height="512" fill="url(#geometry)" opacity="0.2"/>
+
+  <!-- Outer Circle (Energy Ring) -->
+  <circle cx="256" cy="256" r="242.5"
+    fill="none"
+    stroke="#00FFFF"
+    stroke-width="3"
+    opacity="0.6"
+    filter="url(#glow)">
+    <animate attributeName="r"
+      from="242.5"
+      to="252.5"
+      dur="3s"
+      repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Sacred Symbol (Based on Card) -->
+  <polygon points="256,100 280,170 350,170 295,210 315,280 256,240 197,280 217,210 162,170 232,170" fill="#00FFFF" opacity="0.3"/>
+
+  <!-- Central Circle -->
+  <circle cx="256" cy="256" r="120"
+    fill="url(#card-gradient)"
+    stroke="#00FFFF"
+    stroke-width="4"
+    filter="url(#glow)"/>
+
+  <!-- Card Number (Major Arcana) -->
+  <text x="256" y="200"
+    font-family="Arial, sans-serif"
+    font-size="48"
+    font-weight="bold"
+    text-anchor="middle"
+    fill="#FFFFFF"
+    opacity="0.9">
+    XVII
+  </text>
+
+  <!-- Card Symbol -->
+  <text x="256" y="280"
+    font-family="Arial, sans-serif"
+    font-size="80"
+    text-anchor="middle">
+    ⭐
+  </text>
+
+  <!-- Card Name -->
+  <text x="256" y="340"
+    font-family="Georgia, serif"
+    font-size="20"
+    font-weight="bold"
+    text-anchor="middle"
+    fill="#FFFFFF"
+    opacity="0.95">
+    THE STAR
+  </text>
+
+  <!-- Session ID (Bottom) -->
+  <text x="256" y="480"
+    font-family="monospace"
+    font-size="12"
+    text-anchor="middle"
+    fill="#00FFFF"
+    opacity="0.7">
+    test-session-001...
+  </text>
+
+  <!-- Energy Indicator -->
+  <rect x="30" y="450" width="15" height="20" fill="#00FFFF" opacity="0.8"/><rect x="50" y="445" width="15" height="25" fill="#00FFFF" opacity="0.8"/><rect x="70" y="440" width="15" height="30" fill="#00FFFF" opacity="0.8"/><rect x="90" y="435" width="15" height="35" fill="#00FFFF" opacity="0.8"/><rect x="110" y="430" width="15" height="40" fill="#00FFFF" opacity="0.2"/>
+
+  <!-- Border -->
+  <rect x="10" y="10" width="492" height="492"
+    fill="none"
+    stroke="#00FFFF"
+    stroke-width="2"
+    opacity="0.6"/>
+</svg>

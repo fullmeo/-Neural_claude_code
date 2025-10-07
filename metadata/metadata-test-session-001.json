@@ -1,0 +1,51 @@
+{
+  "name": "The Star - Session #test-ses",
+  "description": "A prophetic DJ session blessed by The Star. This NFT represents a unique musical journey through the mystical realms, guided by Tarot wisdom and cosmic vibrations.",
+  "image": "ipfs://[TO_BE_REPLACED]/glyph-test-session-001.svg",
+  "external_url": "https://djcloudio.com/session/test-session-001",
+  "attributes": [
+    {
+      "trait_type": "Tarot Card",
+      "value": "The Star"
+    },
+    {
+      "trait_type": "Card Number",
+      "value": "XVII"
+    },
+    {
+      "trait_type": "Ritual",
+      "value": "Invocation Rituelle"
+    },
+    {
+      "trait_type": "Energy Level",
+      "value": 85,
+      "max_value": 100
+    },
+    {
+      "trait_type": "BPM",
+      "value": 128,
+      "display_type": "number"
+    },
+    {
+      "trait_type": "Duration (min)",
+      "value": 60,
+      "display_type": "number"
+    },
+    {
+      "trait_type": "Tracks",
+      "value": 0,
+      "display_type": "number"
+    },
+    {
+      "trait_type": "Timestamp",
+      "value": 1759814733494,
+      "display_type": "date"
+    },
+    {
+      "trait_type": "Sacred Color",
+      "value": "#00FFFF"
+    }
+  ],
+  "background_color": "000510",
+  "animation_url": "ipfs://[TO_BE_REPLACED]/session-test-session-001.mp4"
+}
